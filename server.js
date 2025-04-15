@@ -20,7 +20,8 @@ app.post("/burn", upload.fields([{ name: "video" }, { name: "subtitles" }]), asy
       fs.mkdirSync("outputs");
     }
 
-    const cmd = `ffmpeg -i ${videoFile.path} -vf "ass=${subtitleFile.path}" -c:a copy ${outputPath}`;
+    const cmd = `ffmpeg -i ${videoFile.path} -vf "ass=${subtitleFile.path},scale=720:-2" -preset ultrafast -c:a copy ${outputPath}`;
+
 
     exec(cmd, (error, stdout, stderr) => {
       if (error) {
