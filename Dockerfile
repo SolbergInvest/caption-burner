@@ -1,20 +1,20 @@
 FROM node:18
 
-# Install FFmpeg and manually install Poppins font
-RUN apt-get update && apt-get install -y ffmpeg wget unzip && \
-    mkdir -p /usr/share/fonts/truetype/poppins && \
-    wget https://fonts.google.com/download?family=Poppins -O /tmp/poppins.zip && \
-    unzip /tmp/poppins.zip -d /usr/share/fonts/truetype/poppins && \
+# Install FFmpeg
+RUN apt-get update && apt-get install -y ffmpeg
+
+# Install font dependencies
+RUN apt-get update && apt-get install -y wget unzip
+
+# Install Poppins (Bold + SemiBold) from GitHub
+RUN mkdir -p /usr/share/fonts/truetype/poppins && \
+    wget https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-Bold.ttf -O /usr/share/fonts/truetype/poppins/Poppins-Bold.ttf && \
+    wget https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-SemiBold.ttf -O /usr/share/fonts/truetype/poppins/Poppins-SemiBold.ttf && \
     fc-cache -f -v
 
-# Create app directory
 WORKDIR /app
-
-# Copy everything in
 COPY . .
 
-# Install dependencies
 RUN npm install
 
-# Run the server
 CMD ["node", "server.js"]
